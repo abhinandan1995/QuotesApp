@@ -3,29 +3,48 @@
 //header('Content-type: image/png');
 // Create the image
 
-function createImage($text){
+function createImage($user, $quote){
 
-$im = imagecreatetruecolor(400, 30);
+$text= strip_tags($quote->content);
+$font = 'fonts/times.ttf';
+$font_size = 24;
+$font_angle= 0;
+
+$width= 600;
+$height= 400;
+
+$chars= $width*5/ (2 *($font_size+ 2*$font_size/3)) + 4;
+$lines = explode('|', wordwrap($text, $chars, '|'));
+
+$linesCount= sizeof($lines);
+$reqY= ($font_size + 7)* $linesCount;
+
+// Starting Y position
+$y = ($height- $reqY)/2 + 15;
+
+$im = imagecreatetruecolor($width, $height);
 
 // Create some colors
-$white = imagecolorallocate($im, 255, 255, 255);
+$color = imagecolorallocate($im, 174, 216, 230);
 $grey = imagecolorallocate($im, 128, 128, 128);
 $black = imagecolorallocate($im, 0, 0, 0);
-imagefilledrectangle($im, 0, 0, 399, 29, $white);
+imagefilledrectangle($im, 0, 0, $width-1, $height-1, $color);
 
-// Replace path by your own font path
-$font = 'times.ttf';
 
-//$text= $_POST['content'];
-// Add some shadow to the text
-imagettftext($im, 20, 0, 11, 21, $grey, $font, $text);
+// Loop through the lines and place them on the image
+foreach ($lines as $line)
+{
+	$x= ($width - strlen($line)*($font_size/2 + 1))/2;
+	imagettftext($im, $font_size, 0, $x, $y, $grey, $font, $line);
+    imagettftext($im, $font_size, 0, $x, $y, $black, $font, $line);
+    // Increment Y so the next line is below the previous line
+    $y += ($font_size+7);
+}
+imagettftext($im, $font_size-($font_size/3), 0, ($width- strlen($quote->title)* $font_size * 2 /3), $y, $black, $font, "- ".$quote->title);
 
-// Add the text
-imagettftext($im, 20, 0, 10, 20, $black, $font, $text);
-
-// Using imagepng() results in clearer text compared with imagejpeg()
-//imagepng($im);
-return $im;
+	imagepng($im, "temp/{$user}.png");
+	imagedestroy($im);
+	return "temp/{$user}.png";
 }
 
 ?> 

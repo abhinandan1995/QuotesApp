@@ -44,7 +44,7 @@ while($loopControl++ < 10){
 		break;
 	}
 }
-showImage($quote);
+showImage($user, $quote);
 updateIndexes($idArray, $user, $quote);
 }
 
@@ -60,30 +60,11 @@ function updateIndexes(& $idArray, $user, $quote){
 	file_put_contents("data/{$user}.txt", "{$quote->ID},", FILE_APPEND);
 }
 
-function getImage($quote){
-
-$url = 'http://localhost/quotes/image.php';
-$data = array('content' => $quote->content, 'title' => $quote->title);
-$options = array(
-    'http' => array(
-        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-        'method'  => 'POST',
-        'content' => http_build_query($data)
-    )
-);
-$context  = stream_context_create($options);
-$result = file_get_contents($url, false, $context);
-if ($result === FALSE) { /* Handle error */ }
-echo "<img src='{$result}' />";
-
-var_dump($result);
-}
-
-function showImage($quote){
-	$img= createImage($quote->content);
-	$img = base64_encode($img);
-	$uri = "data:image/png;base64," . $img;
-echo "<img src=" . $uri /* URI goes here */ . "alt=\"the image\" />";
+function showImage($user, $quote){
+	$path= createImage($user, $quote);
+	echo "<img src='{$path}' />";
+	echo $quote->content;
+	echo "<br />".strlen($quote->content);
 }
 
 ?>

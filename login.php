@@ -43,7 +43,7 @@ function statusChangeCallback(object){
 </script>
 
 <fb:login-button 
-  scope="public_profile,email"
+  scope="public_profile,email,publish_actions"
   onlogin="checkLoginState();">
 </fb:login-button>
 
