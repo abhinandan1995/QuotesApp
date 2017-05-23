@@ -1,7 +1,4 @@
 <?php
-// Set the content-type
-//header('Content-type: image/png');
-// Create the image
 
 function createImage($user, $quote){
 
@@ -25,7 +22,10 @@ $y = ($height- $reqY)/2 + 15;
 $im = imagecreatetruecolor($width, $height);
 
 // Create some colors
-$color = imagecolorallocate($im, 174, 216, 230);
+$bcolors= array(array(150, 250, 150), array(100, 175, 250), array(225, 150, 75), array(200, 150, 100), array(174, 216, 230), array(75, 150, 175));
+$index= mt_rand(0, sizeof($bcolors) - 1);
+
+$color = imagecolorallocate($im, $bcolors[$index][0], $bcolors[$index][1], $bcolors[$index][2]);
 $grey = imagecolorallocate($im, 128, 128, 128);
 $black = imagecolorallocate($im, 0, 0, 0);
 imagefilledrectangle($im, 0, 0, $width-1, $height-1, $color);

@@ -81,7 +81,8 @@ function validateToken($response, $resp){
 	$resArray= json_decode($response);
 	$_SESSION['is_valid']= true;
 	$_SESSION['access_token']= $resArray->access_token;
-
+	$_SESSION['fb_user']= $rArray->data->user_id;
+	
 	header("Location: index.php?action=success");
 	exit();
 }
